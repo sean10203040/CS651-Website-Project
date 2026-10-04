@@ -1,62 +1,43 @@
-# CS651 Project 1 — Part 1
+# Roomwise — CS651 Project 1, Part 1
 
-Author: Sean Farmer
-Theme: Launchpad, a general workspace frontend.
+A practical room-planning startup frontend, adapted from Sean Farmer's original Launchpad project. Original source history and attribution are preserved. Starting commit: `82c27a93732492ce02729c2b7e98d18584c4138d`.
 
-## Open on Windows
-1. Extract this entire ZIP.
-2. Install Node.js LTS if it is not already installed.
-3. Open the extracted folder in VS Code (or your preferred editor).
-4. Open a terminal/PowerShell in that folder.
-5. Run `npm install`.
-6. Run `npm run build`.
-7. Run `npm start`.
-8. Open http://localhost:3000 in your browser. Keep the terminal open. Press Ctrl+C to stop.
+## Run locally
 
-A prebuilt `dist` folder is included. With Node installed, `npm start` can serve it without rebuilding. Do not open React JSX files directly in the browser. The public HTML pages reference the compiled assets in dist.
+From `CS651_Part1_Launchpad`:
 
-## What to edit
-- `public/index.html`: traditional Home page.
-- `public/about.html`: traditional About page.
-- `public/contact.html`: traditional Contact page. Replace the class contact wording with your preferred contact method if desired.
-- `public/styles.css`: shared CSS, spacing, borders, padding, responsive rules.
-- `public/images/workspace.svg`: original local workflow graphic on every page.
-- `src/components.jsx`: reusable React components.
-- `src/workspace.jsx`: React App page and state.
-- `src/login.jsx`: React login/create-account forms and state.
-- `src/static.js`: Bootstrap JavaScript for the static pages' responsive navbar.
-- `public/app.html` and `public/login.html`: minimal React host pages.
+```sh
+npm ci
+npm run build
+npm start
+```
 
-Run `npm run build` after edits. `generate-pages.py` was used to create the initial static HTML; you do not need to run it. Re-running it overwrites those HTML files.
+Open http://localhost:3000. The esbuild build writes `dist/`; the Node preview serves it on port 3000. A prebuilt dist is included. Dependencies are pinned in package.json and package-lock.json.
 
-## Assignment requirements
-| Requirement | Implementation |
-|---|---|
-| Home, About, Contact | Separate traditional HTML pages |
-| App as a React SPA | app.html mounts workspace.jsx |
-| Three reusable components, excluding App | Navigation, Footer, PageHeading, StatCard, WorkspaceCard, FilterBar, FormField |
-| Component composition | App composes Navigation, StatCard, WorkspaceCard, FilterBar, Footer, etc. |
-| State management | useState tracks card saves, category, view, checklist, login, and account fields |
-| SPA navigation | Explore and Saved hash navigation; browser back/forward supported |
-| Bootstrap responsiveness | Bootstrap grid, navbar-expand-md, collapse plugin, responsive columns |
-| Two GUI interactions | Bootstrap mobile menu; React save/filter/checklist interactions |
-| Graphics on every page | Local SVG workflow image; React renders image on App and Login |
-| CSS box model | Shared stylesheet uses margin, border, padding, width, and responsive grid |
-| React-only visible Login UI | login.html contains only the root div and script; components render all visible UI |
-| Create-account behavior | Name, email, login, password form appears on right on desktop; stacks below on mobile; Enter removes it and fills original login/password |
+## Demonstrate the App
 
-## Try it
-1. Resize to a narrow mobile width. Open/close the hamburger navigation.
-2. Open App. Save a card. The counter increases; visit Saved.
-3. Filter categories; toggle a saved card off; try an empty category.
-4. Check the getting-started items. The count and progress bar update.
-5. Open Login. Click Create account. Fill all four fields with sample details.
-6. Click Enter. The account form disappears; login/password populate the original form.
-7. Submit Sign in to see the demo response.
+1. Open App and compare the sample room photo with its prepared floor plan.
+2. Drag a furniture piece, or select it and use arrow keys / movement buttons. Arrow movements are 10 cm in the approximate plan.
+3. Rotate it 90 degrees and edit its width/depth. Watch the overlap and door-area checks update.
+4. Enter a known sofa width to rescale the sample plan. Other room/furniture dimensions remain editable estimates.
+5. Compare Original with Your layout. Try a clearer doorway or reset the starting layout.
+6. Save the layout, open My saved layout, and continue editing the saved snapshot.
 
-## Scope
-Part 1 only: no database, backend, real authentication, or account creation. Passwords stay in React memory, are never submitted, and are not written to browser storage. Refresh resets the demo state. Do not use real passwords. Actual App purpose can be determined during the Project 2 proposal.
+Automatic photo reconstruction is simulated. No uploaded image is analyzed and no ML runs. The room image is AI-generated and paired with a hand-authored illustrative plan. Dimensions require real-world confirmation; checks use simple axis-aligned furniture footprints and do not certify walking clearance. Edits and saved layouts are React state and reset on refresh.
 
-Bootstrap 5.3.3, React 18.3.1, and esbuild are pinned in package.json with a lockfile. All visual assets and browser dependencies are bundled locally. No CDN is required when viewing the build.
+## Required Part1 structure
 
-Hosting this preview is not completion of the assignment's AWS/deployment portion. That portion is outside this Part 1 deliverable.
+- Traditional Home, About, Contact pages: public/index.html, about.html, contact.html.
+- React App SPA: src/workspace.jsx; minimal public/app.html host.
+- Reusable components: Navigation, Footer, NumericField, FurnitureItem, RoomCanvas, MeasurementPanel, SavedLayout.
+- State: selection, position, rotation, dimensions, scale, comparison, saved snapshot; hash navigation between editor and saved layout.
+- Bootstrap navbar and responsive layout; room graphics and shared box-model CSS throughout.
+- React Sign In: src/login.jsx and minimal public/login.html. Create account opens a separate Name, Email, Login, Password form to the right of the original sign-in form on desktop and below it on mobile. Enter hides registration and fills the original login/password fields with the registration details. This is an in-memory demo; no authentication or real account storage is connected. Use sample credentials.
+
+## Assets and editing
+
+`public/images/sample-room.png` was created using the built-in imagegen tool. Its final prompt is in `public/images/sample-room.prompt.txt`. The room diagram and editor are native SVG/React. Home uses the same room photo and `public/images/planner-preview.jpg`, an actual browser capture of the working planner. Sean Farmer's original source attribution and commit history are preserved in this README and Git history; the public site uses Roomwise product branding.
+
+Edit public HTML/CSS and src JSX, then rebuild. `generate-pages.py` contains the original Launchpad content and overwrites the adapted pages; do not rerun it over Roomwise.
+
+Part2/Part3 infrastructure and cloud deployment are separate, deferred work.
